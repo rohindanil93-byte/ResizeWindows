@@ -1,17 +1,20 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Windows.Forms;
-
 using HarmonyLib;
 
 namespace ResizeWindows
 {
     public class ResizeWindows : AuroraPatch.Patch
     {
+        private Harmony _harmony;
+
         public override string Description => "Allow for resizing windows.";
 
-        protected override void Loaded(Harmony harmony)
+        protected override void Loaded()
         {
+            _harmony = new Harmony("com.github.rohindanil93.resizewindows");
+            
             LogInfo("Loading ResizeWindows...");
             HarmonyMethod formConstructorPostfixMethod = new HarmonyMethod(GetType().GetMethod("FormConstructorPostfix", AccessTools.all));
             foreach (var form in AuroraAssembly.GetTypes().Where(t => typeof(Form).IsAssignableFrom(t)))
@@ -20,7 +23,7 @@ namespace ResizeWindows
                 {
                     foreach (var ctor in form.GetConstructors())
                     {
-                        harmony.Patch(ctor, postfix: formConstructorPostfixMethod);
+                        _harmony.Patch(ctor, postfix: formConstructorPostfixMethod);
                     }
                 }
                 catch (Exception e)
@@ -34,7 +37,7 @@ namespace ResizeWindows
         /// Harmony method to postfix the Form constructor in order to add our custom HandleCreated callback.
         /// </summary>
         /// <param name="__instance"></param>
-        private static void FormConstructorPostfix(Form __instance)
+        public static void FormConstructorPostfix(Form __instance)
         {
             __instance.HandleCreated += CustomHandleCreated;
         }
@@ -47,8 +50,11 @@ namespace ResizeWindows
         private static void CustomHandleCreated(Object sender, EventArgs e)
         {
             Form form = sender as Form;
-            form.FormBorderStyle = FormBorderStyle.Sizable;
-            form.AutoScroll = true;
+            if (form != null)
+            {
+                form.FormBorderStyle = FormBorderStyle.Sizable;
+                form.AutoScroll = true;
+            }
         }
     }
 }
