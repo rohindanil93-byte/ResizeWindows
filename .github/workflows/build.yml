@@ -1,4 +1,4 @@
-name: Build ResizeWindows DLL (Windows)
+name: Build ResizeWindows DLL
 
 on:
   push:
@@ -12,16 +12,22 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout ResizeWindows
         uses: actions/checkout@v4
+        with:
+          # по умолчанию чек-аутит твой репозиторий ResizeWindows
 
-      - name: Add MSBuild to PATH
+      - name: Clone AuroraPatch
+        run: |
+          git clone https://github.com/rohindanil93-byte/AuroraPatch AuroraPatch
+
+      - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
       - name: Setup NuGet
         uses: nuget/setup-nuget@v1
 
-      - name: Restore packages
+      - name: Restore NuGet packages
         run: nuget restore ResizeWindows.sln
 
       - name: Build solution
@@ -32,5 +38,5 @@ jobs:
         with:
           name: ResizeWindows-DLL
           path: |
-            **/bin/Release/ResizeWindows.dll
-            **/bin/Release/net48/ResizeWindows.dll
+            **\bin\Release\ResizeWindows.dll
+            **\bin\Release\net48\ResizeWindows.dll

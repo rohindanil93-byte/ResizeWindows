@@ -18,6 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AuroraPatch\AuroraPatch\AuroraPatch.csproj" />
+
     <!-- Если используешь AuroraPatch как submodule или положил папку AuroraPatch рядом с этим проектом,
          добавить ProjectReference, например:
     -->
