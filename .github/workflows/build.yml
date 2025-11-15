@@ -1,0 +1,36 @@
+name: Build ResizeWindows DLL (Windows)
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Setup NuGet
+        uses: nuget/setup-nuget@v1
+
+      - name: Restore packages
+        run: nuget restore ResizeWindows.sln
+
+      - name: Build solution
+        run: msbuild.exe ResizeWindows.sln /p:Configuration=Release /p:Platform="Any CPU"
+
+      - name: Upload DLL artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ResizeWindows-DLL
+          path: |
+            **/bin/Release/ResizeWindows.dll
+            **/bin/Release/net48/ResizeWindows.dll
