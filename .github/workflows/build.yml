@@ -14,15 +14,17 @@ jobs:
     steps:
       - name: Checkout ResizeWindows
         uses: actions/checkout@v4
-        with:          # по умолчанию чек-аутит твой репозиторий ResizeWindows
-      - name: Clone AuroraPatch 
+        with:
+          submodules: false  # пока без субмодулей
+
+      - name: Clone AuroraPatch
         run: |
           git clone https://github.com/rohindanil93-byte/AuroraPatch AuroraPatch
 
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
-      - name: Setup NuGet
+      - name: Setup NuGet CLI
         uses: nuget/setup-nuget@v1
 
       - name: Restore NuGet packages
