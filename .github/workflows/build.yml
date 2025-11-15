@@ -17,7 +17,7 @@ jobs:
         with:
           # по умолчанию чек-аутит твой репозиторий ResizeWindows
 
-      - name: Clone AuroraPatch
+      - name: Clone AuroraPatch 
         run: |
           git clone https://github.com/rohindanil93-byte/AuroraPatch AuroraPatch
 
